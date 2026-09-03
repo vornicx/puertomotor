@@ -1,0 +1,64 @@
+import { formatPrice, formatKm } from './data.js';
+
+export function header(active = '') {
+  return `
+    <header class="site-header" data-header>
+      <a class="wordmark" href="/index.html" aria-label="Puerto Motor, inicio">PUERTO MOTOR</a>
+      <button class="menu-button" aria-label="Abrir menú" aria-expanded="false" data-menu-button>
+        <span></span><span></span>
+      </button>
+      <nav class="nav" data-nav>
+        <a class="${active === 'stock' ? 'is-active' : ''}" href="/stock.html">Stock</a>
+        <a href="/index.html#vende">Vende tu coche</a>
+        <a href="/index.html#servicios">Servicios</a>
+        <a href="/index.html#puerto-motor">Puerto Motor</a>
+        <a href="/index.html#contacto">Contacto</a>
+      </nav>
+      <a class="header-cta" href="/stock.html">Ver stock <span>→</span></a>
+    </header>`;
+}
+
+export function vehicleCard(vehicle, large = false) {
+  return `
+  <article class="vehicle-card ${large ? 'vehicle-card--large' : ''}">
+    <a class="vehicle-card__media" href="/vehicle.html?id=${vehicle.id}" aria-label="Ver ${vehicle.brand} ${vehicle.model}">
+      <img src="${vehicle.image}" alt="${vehicle.brand} ${vehicle.model}" loading="lazy" />
+    </a>
+    <div class="vehicle-card__body">
+      <div class="vehicle-card__eyebrow">${vehicle.year}</div>
+      <h3><a href="/vehicle.html?id=${vehicle.id}">${vehicle.brand} ${vehicle.model}</a></h3>
+      <div class="vehicle-card__meta">
+        <span>${formatKm(vehicle.km)}</span><span>${vehicle.hp} CV</span><span>${vehicle.fuel}</span>
+      </div>
+      <div class="vehicle-card__footer">
+        <strong>${formatPrice(vehicle.price)}</strong>
+        <a href="/vehicle.html?id=${vehicle.id}">Ver detalles <span>→</span></a>
+      </div>
+    </div>
+  </article>`;
+}
+
+export function footer() {
+  return `
+    <footer class="footer" id="contacto">
+      <div class="footer__brand">
+        <div class="wordmark wordmark--light">PUERTO MOTOR</div>
+        <p>Calle Estuario, 14<br>11500 El Puerto de Santa María, Cádiz</p>
+      </div>
+      <div><a href="tel:+34956856488">956 856 488</a><br><a href="mailto:ventas4@puertomotor.es">ventas4@puertomotor.es</a><p>Lu–Vie · 09:00–19:00<br>Sáb · 10:00–14:00</p></div>
+      <div><a href="/stock.html">Stock</a><a href="/#vende">Vende tu coche</a><a href="/#servicios">Servicios</a><a href="/#puerto-motor">Puerto Motor</a></div>
+      <div><a href="/#contacto">Contacto</a><a href="https://puertomotor.es/aviso-legal/">Aviso legal</a><a href="https://puertomotor.es/politica-de-privacidad/">Privacidad</a></div>
+    </footer>`;
+}
+
+export function setupShell() {
+  const button = document.querySelector('[data-menu-button]');
+  const nav = document.querySelector('[data-nav]');
+  button?.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open));
+    nav?.classList.toggle('is-open', !open);
+  });
+  const header = document.querySelector('[data-header]');
+  window.addEventListener('scroll', () => header?.classList.toggle('is-scrolled', window.scrollY > 20), { passive: true });
+}
