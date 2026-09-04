@@ -12,10 +12,75 @@ const detailImage = gallery[Math.min(4, gallery.length - 1)];
 const detailImagePosition = galleryPositions[Math.min(4, galleryPositions.length - 1)] || vehicle.heroPosition || '50% 50%';
 const app = document.querySelector('#app');
 
+function ensureMeta(attribute, key, content) {
+  let meta = document.querySelector(`meta[${attribute}="${key}"]`);
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute(attribute, key);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', content);
+}
+
 document.title = `${vehicle.brand} ${vehicle.model} — Puerto Motor`;
 document.querySelector('meta[name="description"]')?.setAttribute('content', `${vehicle.brand} ${vehicle.model}, ${vehicle.year}, ${formatKm(vehicle.km)}, ${vehicle.hp} CV. Consulta fotografías, equipamiento, garantía y contacto con Puerto Motor.`);
-document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${vehicle.brand} ${vehicle.model} — Puerto Motor`);
-document.querySelector('meta[property="og:description"]')?.setAttribute('content', `${formatPrice(vehicle.price)} · ${formatKm(vehicle.km)} · ${vehicle.hp} CV · ${vehicle.warranty} de garantía.`);
+ensureMeta('property', 'og:title', `${vehicle.brand} ${vehicle.model} — Puerto Motor`);
+ensureMeta('property', 'og:description', `${formatPrice(vehicle.price)} · ${formatKm(vehicle.km)} · ${vehicle.hp} CV · ${vehicle.warranty} de garantía.`);
+ensureMeta('property', 'og:image', vehicle.hero);
+ensureMeta('property', 'og:type', 'website');
+ensureMeta('name', 'twitter:card', 'summary_large_image');
+ensureMeta('name', 'twitter:title', `${vehicle.brand} ${vehicle.model} — Puerto Motor`);
+ensureMeta('name', 'twitter:description', `${formatPrice(vehicle.price)} · ${formatKm(vehicle.km)} · ${vehicle.hp} CV`);
+ensureMeta('name', 'twitter:image', vehicle.hero);
+
+let canonical = document.querySelector('link[rel="canonical"]');
+if (!canonical) {
+  canonical = document.createElement('link');
+  canonical.rel = 'canonical';
+  document.head.appendChild(canonical);
+}
+canonical.href = `${location.origin}/vehicle.html?id=${encodeURIComponent(vehicle.id)}`;
+
+const structuredData = document.createElement('script');
+structuredData.type = 'application/ld+json';
+structuredData.textContent = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Vehicle',
+  name: `${vehicle.brand} ${vehicle.model}`,
+  description: vehicle.summary,
+  image: gallery,
+  url: canonical.href,
+  brand: { '@type': 'Brand', name: vehicle.brand },
+  model: vehicle.model,
+  vehicleModelDate: String(vehicle.year),
+  mileageFromOdometer: { '@type': 'QuantitativeValue', value: vehicle.km, unitCode: 'KMT' },
+  fuelType: vehicle.fuel,
+  vehicleTransmission: vehicle.transmission,
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'EUR',
+    price: vehicle.price,
+    availability: 'https://schema.org/InStock',
+    seller: {
+      '@type': 'Organization',
+      name: 'Puerto Motor',
+      telephone: '+34956856488',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Calle Estuario, 14',
+        postalCode: '11500',
+        addressLocality: 'El Puerto de Santa María',
+        addressRegion: 'Cádiz',
+        addressCountry: 'ES'
+      }
+    }
+  }
+});
+document.head.appendChild(structuredData);
+
+const fichaMessage = encodeURIComponent(`Hola, quiero la ficha completa y más información sobre el ${vehicle.brand} ${vehicle.model}`);
+const infoMessage = encodeURIComponent(`Hola, quiero información sobre el ${vehicle.brand} ${vehicle.model}`);
+const detailMessage = encodeURIComponent(`Hola, quiero información detallada sobre el ${vehicle.brand} ${vehicle.model}`);
 
 app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${vehicle.id}">
   <section class="detail">
@@ -45,10 +110,10 @@ app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${veh
           <div class="spec"><label>Combustible</label>${vehicle.fuel}</div><div class="spec"><label>Garantía</label>${vehicle.warranty}</div>
         </div>
         <div class="detail__actions">
-          <a class="button button--dark" href="https://wa.me/34605932417?text=${encodeURIComponent(`Hola, quiero información sobre el ${vehicle.brand} ${vehicle.model}`)}">${buttonLabel('WhatsApp')}</a>
+          <a class="button button--dark" href="https://wa.me/34605932417?text=${infoMessage}">${buttonLabel('WhatsApp')}</a>
           <a class="button button--outline" href="tel:+34956856488">${buttonLabel('Llamar a ventas')}</a>
         </div>
-        <a class="detail__source" href="${vehicle.source}" target="_blank" rel="noreferrer">Ver anuncio original en Puerto Motor ↗</a>
+        <a class="detail__source" href="https://wa.me/34605932417?text=${fichaMessage}">Solicitar ficha completa e historial →</a>
       </aside>
     </div>
   </section>
@@ -92,7 +157,7 @@ app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${veh
       <div class="product-story__index">03</div>
       <h2>Información clara.<br>Sin letra pequeña visual.</h2>
       <p>Esta unidad se presenta con fotografías reales, kilometraje indicado y los datos esenciales visibles desde el primer momento. Si necesitas documentación, historial o información adicional, el equipo de Puerto Motor te atiende directamente.</p>
-      <a class="text-link" href="https://wa.me/34605932417?text=${encodeURIComponent(`Hola, quiero información detallada sobre el ${vehicle.brand} ${vehicle.model}`)}">${buttonLabel('Solicitar información')}</a>
+      <a class="text-link" href="https://wa.me/34605932417?text=${detailMessage}">${buttonLabel('Solicitar información')}</a>
     </div>
   </section>
 
@@ -102,7 +167,7 @@ app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${veh
 
   <div class="mobile-vehicle-cta" aria-label="Contactar sobre ${vehicle.brand} ${vehicle.model}">
     <div><span>${vehicle.brand}</span><strong>${formatPrice(vehicle.price)}</strong></div>
-    <a href="https://wa.me/34605932417?text=${encodeURIComponent(`Hola, quiero información sobre el ${vehicle.brand} ${vehicle.model}`)}">WhatsApp</a>
+    <a href="https://wa.me/34605932417?text=${infoMessage}">WhatsApp</a>
   </div>
 </main>${footer()}`;
 setupShell();
