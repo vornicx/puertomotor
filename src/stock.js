@@ -46,6 +46,10 @@ ${header('stock')}
   </section>
 
   <div class="stock-controls-shell">
+    <div class="stock-mobile-controls">
+      <button type="button" data-filter-toggle aria-expanded="false">Filtros <span data-mobile-filter-count></span></button>
+      <span data-mobile-result-count></span>
+    </div>
     <form class="stock-controls" data-toolbar>
       <label><span>Marca</span><select name="brand"><option value="">Todas</option>${brands.map(x=>selectOption(x, params.get('brand'))).join('')}</select></label>
       <label><span>Carrocería</span><select name="body"><option value="">Todas</option>${bodies.map(x=>selectOption(x, params.get('body'))).join('')}</select></label>
@@ -73,6 +77,9 @@ const grid = document.querySelector('[data-grid]');
 const count = document.querySelector('[data-count]');
 const activeFilters = document.querySelector('[data-active-filters]');
 const clearButton = document.querySelector('[data-clear]');
+const filterToggle = document.querySelector('[data-filter-toggle]');
+const mobileFilterCount = document.querySelector('[data-mobile-filter-count]');
+const mobileResultCount = document.querySelector('[data-mobile-result-count]');
 
 function syncUrl(fd) {
   const next = new URLSearchParams();
@@ -111,6 +118,8 @@ function render() {
   const filterCount = [brand, body, fuel, fd.get('price')].filter(Boolean).length;
   count.textContent = `${filtered.length} ${filtered.length === 1 ? 'vehículo' : 'vehículos'}`;
   activeFilters.textContent = filterCount ? `${filterCount} ${filterCount === 1 ? 'filtro activo' : 'filtros activos'}` : '';
+  mobileFilterCount.textContent = filterCount ? `· ${filterCount}` : '';
+  mobileResultCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'vehículo' : 'vehículos'}`;
   clearButton.classList.toggle('is-hidden', filterCount === 0 && sort === 'featured');
 
   grid.innerHTML = filtered.length
@@ -125,6 +134,12 @@ function clearFilters() {
   form.reset();
   render();
 }
+
+filterToggle.addEventListener('click', () => {
+  const open = filterToggle.getAttribute('aria-expanded') === 'true';
+  filterToggle.setAttribute('aria-expanded', String(!open));
+  form.classList.toggle('is-open', !open);
+});
 
 form.addEventListener('change', render);
 clearButton.addEventListener('click', clearFilters);
