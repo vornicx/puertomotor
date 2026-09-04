@@ -15,6 +15,10 @@ app.innerHTML = `
           <a class="button" href="#vende">${buttonLabel('Vender mi coche')}</a>
         </div>
       </div>
+      <div class="hero__caption" aria-label="Vehículo mostrado">
+        <span>Porsche 911 Carrera 4S</span>
+        <span>2020 · 450 CV</span>
+      </div>
     </section>
 
     <form class="search-band" data-search-form>
@@ -41,10 +45,21 @@ app.innerHTML = `
           <p>Más de diez años comprando y vendiendo automóviles. Cada unidad se selecciona, se revisa y se entrega con información clara sobre kilometraje, mantenimiento y estado.</p>
           <a class="text-link text-link--light" href="https://puertomotor.es/instalaciones/">${buttonLabel('Conoce Puerto Motor')}</a>
         </div>
-        <div class="editorial__gallery editorial__gallery--real">
-          <figure class="editorial__gallery-main"><img src="https://puertomotor.es/wp-content/uploads/2023/12/DSC07353-Grande-672x568.jpg" alt="Instalaciones de Puerto Motor" loading="lazy"></figure>
-          <figure><img src="https://puertomotor.es/wp-content/uploads/2023/12/instalaciones01-672x568.jpg" alt="Showroom de Puerto Motor" loading="lazy"></figure>
-          <figure><img src="https://puertomotor.es/wp-content/uploads/2023/12/PUERTOMOTOR-19-Grande-672x568.jpg" alt="Exposición de Puerto Motor" loading="lazy"></figure>
+        <div class="editorial__media">
+          <figure class="editorial__media-main">
+            <img src="https://puertomotor.es/wp-content/uploads/2023/12/DSC07353-Grande-672x568.jpg" alt="Instalaciones de Puerto Motor" loading="lazy">
+            <figcaption>El Puerto de Santa María · Cádiz</figcaption>
+          </figure>
+          <div class="editorial__media-side">
+            <figure>
+              <img src="https://puertomotor.es/wp-content/uploads/2023/12/instalaciones01-672x568.jpg" alt="Showroom de Puerto Motor" loading="lazy">
+              <figcaption>Showroom Puerto Motor</figcaption>
+            </figure>
+            <figure>
+              <img src="https://puertomotor.es/wp-content/uploads/2023/12/DSC01421-min-1024x683-1.jpg" alt="Equipo de Puerto Motor" loading="lazy">
+              <figcaption>Equipo Puerto Motor</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
