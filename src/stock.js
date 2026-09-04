@@ -8,8 +8,7 @@ ${header('stock')}
 <main>
   <section class="page-hero page-hero--stock">
     <div class="page-hero__count">Stock actual</div>
-    <h1>Encuentra tu próximo coche.</h1>
-    <p>Vehículos disponibles en Puerto Motor, con información esencial a primera vista y filtros que realmente ayudan.</p>
+    <h1>Unidades disponibles.</h1>
   </section>
   <form class="stock-toolbar" data-toolbar>
     <select name="brand"><option value="">Todas las marcas</option>${brands.map(x=>`<option ${params.get('brand')===x?'selected':''}>${x}</option>`).join('')}</select>
@@ -20,7 +19,7 @@ ${header('stock')}
     <button type="button" class="toolbar-clear" data-clear>Limpiar</button>
   </form>
   <section class="stock-results">
-    <div class="results-bar"><div class="results-count" data-count></div><span>Selección actual de Puerto Motor</span></div>
+    <div class="results-bar"><div class="results-count" data-count></div></div>
     <div class="vehicle-grid" data-grid></div>
   </section>
 </main>${footer()}`;
@@ -42,7 +41,7 @@ function render() {
     return Number(Boolean(b.featured)) - Number(Boolean(a.featured));
   });
   count.textContent = `${filtered.length} ${filtered.length===1?'vehículo':'vehículos'}`;
-  grid.innerHTML = filtered.length ? filtered.map(v=>vehicleCard(v)).join('') : '<div class="empty-state"><strong>No hemos encontrado coincidencias.</strong><span>Prueba con una búsqueda menos restrictiva.</span></div>';
+  grid.innerHTML = filtered.length ? filtered.map(v=>vehicleCard(v)).join('') : '<div class="empty-state"><strong>No hay vehículos con estos filtros.</strong><span>Prueba a quitar algún filtro.</span></div>';
 }
 
 form.addEventListener('change', render);
