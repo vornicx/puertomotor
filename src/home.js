@@ -82,8 +82,8 @@ app.innerHTML = `
       </div>
     </section>
 
-    <section class="home-manifesto" id="puerto-motor">
-      <div class="home-manifesto__copy">
+    <section class="home-manifesto" id="servicios">
+      <div class="home-manifesto__copy" id="puerto-motor">
         <span class="home-index">02</span>
         <h2>Criterio antes<br>que volumen.</h2>
         <p>Puerto Motor lleva más de diez años comprando y vendiendo automóviles. La selección no empieza en la web: empieza antes, decidiendo qué unidad merece entrar.</p>
@@ -92,12 +92,12 @@ app.innerHTML = `
       </div>
       <div class="home-manifesto__gallery">
         <figure class="home-manifesto__gallery-main">
-          <img src="https://puertomotor.es/wp-content/uploads/2023/12/DSC07353-Grande-672x568.jpg" alt="Instalaciones de Puerto Motor" loading="lazy">
+          <img src="https://puertomotor.es/wp-content/uploads/2023/12/DSC07353-Grande.jpg" alt="Instalaciones de Puerto Motor" loading="lazy">
           <figcaption>Calle Estuario, 14</figcaption>
         </figure>
         <div class="home-manifesto__gallery-side">
           <figure>
-            <img src="https://puertomotor.es/wp-content/uploads/2023/12/instalaciones01-672x568.jpg" alt="Showroom de Puerto Motor" loading="lazy">
+            <img src="https://puertomotor.es/wp-content/uploads/2023/12/instalaciones01.jpg" alt="Showroom de Puerto Motor" loading="lazy">
             <figcaption>Showroom</figcaption>
           </figure>
           <figure>
@@ -132,12 +132,10 @@ const heroMeta = document.querySelector('[data-hero-meta]');
 const heroPrice = document.querySelector('[data-hero-price]');
 const heroLink = document.querySelector('[data-hero-link]');
 const heroSwitches = [...document.querySelectorAll('[data-hero-switch]')];
-let heroIndex = 0;
 
 function showHero(index) {
   const vehicle = heroVehicles[index];
   if (!vehicle || !heroImage) return;
-  heroIndex = index;
   heroImage.classList.add('is-changing');
   window.setTimeout(() => {
     heroImage.src = vehicle.hero;
