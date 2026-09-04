@@ -6,6 +6,10 @@ const vehicle = vehicles.find(v=>v.id===id) || vehicles[0];
 const related = vehicles.filter(v=>v.id!==vehicle.id && (v.brand===vehicle.brand || v.body===vehicle.body)).slice(0,3);
 const gallery = vehicle.gallery?.length ? vehicle.gallery : [vehicle.hero];
 const galleryPositions = vehicle.galleryPositions?.length ? vehicle.galleryPositions : gallery.map(()=>vehicle.heroPosition || '50% 50%');
+const storyImage = gallery[Math.min(3, gallery.length - 1)];
+const storyImagePosition = galleryPositions[Math.min(3, galleryPositions.length - 1)] || vehicle.heroPosition || '50% 50%';
+const detailImage = gallery[Math.min(4, gallery.length - 1)];
+const detailImagePosition = galleryPositions[Math.min(4, galleryPositions.length - 1)] || vehicle.heroPosition || '50% 50%';
 const app = document.querySelector('#app');
 
 document.title = `${vehicle.brand} ${vehicle.model} — Puerto Motor`;
@@ -13,7 +17,7 @@ document.querySelector('meta[name="description"]')?.setAttribute('content', `${v
 document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${vehicle.brand} ${vehicle.model} — Puerto Motor`);
 document.querySelector('meta[property="og:description"]')?.setAttribute('content', `${formatPrice(vehicle.price)} · ${formatKm(vehicle.km)} · ${vehicle.hp} CV · ${vehicle.warranty} de garantía.`);
 
-app.innerHTML = `${header('stock')}<main>
+app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${vehicle.id}">
   <section class="detail">
     <a class="detail__back" href="/stock.html">← Volver al stock</a>
     <div class="detail__grid">
@@ -49,14 +53,57 @@ app.innerHTML = `${header('stock')}<main>
     </div>
   </section>
 
-  <section class="vehicle-story">
-    <div class="vehicle-story__intro"><div class="section-kicker">Equipamiento destacado</div><h2>Lo esencial, sin ruido.</h2></div>
-    <div class="vehicle-story__list">${vehicle.highlights.map(item=>`<div>${item}</div>`).join('')}</div>
+  <section class="product-numbers" aria-label="Datos principales de ${vehicle.brand} ${vehicle.model}">
+    <div><span>Potencia</span><strong>${vehicle.hp}</strong><em>CV</em></div>
+    <div><span>Kilometraje</span><strong>${new Intl.NumberFormat('es-ES').format(vehicle.km)}</strong><em>km</em></div>
+    <div><span>Año</span><strong>${vehicle.year}</strong><em>unidad</em></div>
+    <div><span>Cambio</span><strong>${vehicle.transmission}</strong><em>transmisión</em></div>
+  </section>
+
+  <section class="product-story">
+    <div class="product-story__copy">
+      <div class="section-kicker">La unidad</div>
+      <div class="product-story__index">01</div>
+      <h2>${vehicle.brand}<br>${vehicle.model}</h2>
+      <p>${vehicle.summary}</p>
+      <div class="product-story__micro"><span>${vehicle.body}</span><span>${vehicle.fuel}</span><span>${vehicle.warranty} de garantía</span></div>
+    </div>
+    <figure class="product-story__media">
+      <img src="${storyImage}" alt="${vehicle.brand} ${vehicle.model}, fotografía real" loading="lazy" style="object-position:${storyImagePosition}">
+      <figcaption>${vehicle.brand} ${vehicle.model} · Puerto Motor</figcaption>
+    </figure>
+  </section>
+
+  <section class="vehicle-story vehicle-story--editorial">
+    <div class="vehicle-story__intro">
+      <div class="section-kicker">Equipamiento destacado</div>
+      <div class="product-story__index">02</div>
+      <h2>Lo que define<br>esta unidad.</h2>
+    </div>
+    <div class="vehicle-story__list">${vehicle.highlights.map((item,index)=>`<div><span>${String(index+1).padStart(2,'0')}</span><strong>${item}</strong></div>`).join('')}</div>
+  </section>
+
+  <section class="product-detail-scene">
+    <figure class="product-detail-scene__media">
+      <img src="${detailImage}" alt="Detalle de ${vehicle.brand} ${vehicle.model}" loading="lazy" style="object-position:${detailImagePosition}">
+    </figure>
+    <div class="product-detail-scene__copy">
+      <div class="section-kicker">Puerto Motor</div>
+      <div class="product-story__index">03</div>
+      <h2>Información clara.<br>Sin letra pequeña visual.</h2>
+      <p>Esta unidad se presenta con fotografías reales, kilometraje indicado y los datos esenciales visibles desde el primer momento. Si necesitas documentación, historial o información adicional, el equipo de Puerto Motor te atiende directamente.</p>
+      <a class="text-link" href="https://wa.me/34605932417?text=${encodeURIComponent(`Hola, quiero información detallada sobre el ${vehicle.brand} ${vehicle.model}`)}">${buttonLabel('Solicitar información')}</a>
+    </div>
   </section>
 
   ${trustRail()}
 
   ${related.length ? `<section class="section related"><div class="section-head"><div><div class="section-kicker">También puede interesarte</div><h2 class="section-title">Más selección Puerto Motor.</h2></div></div><div class="vehicle-grid">${related.map(v=>vehicleCard(v)).join('')}</div></section>` : ''}
+
+  <div class="mobile-vehicle-cta" aria-label="Contactar sobre ${vehicle.brand} ${vehicle.model}">
+    <div><span>${vehicle.brand}</span><strong>${formatPrice(vehicle.price)}</strong></div>
+    <a href="https://wa.me/34605932417?text=${encodeURIComponent(`Hola, quiero información sobre el ${vehicle.brand} ${vehicle.model}`)}">WhatsApp</a>
+  </div>
 </main>${footer()}`;
 setupShell();
 
