@@ -2,11 +2,13 @@ import { vehicles, featuredVehicles, brands, bodies } from './data.js';
 import { header, vehicleCard, footer, setupShell, trustRail, buttonLabel } from './components.js';
 
 const app = document.querySelector('#app');
+const homeHero = featuredVehicles[0] || vehicles[0];
+
 app.innerHTML = `
   ${header()}
   <main>
     <section class="hero">
-      <div class="hero__image" aria-hidden="true"></div>
+      <div class="hero__image" aria-hidden="true" style="background-image:url('${homeHero.hero}');background-position:${homeHero.heroPosition || '50% 50%'}"></div>
       <div class="hero__content">
         <h1>Automóviles<br>extraordinarios.</h1>
         <p>Selección de vehículos premium y deportivos con historial claro, kilometraje certificado y una atención a la altura del coche.</p>
@@ -16,8 +18,8 @@ app.innerHTML = `
         </div>
       </div>
       <div class="hero__caption" aria-label="Vehículo mostrado">
-        <span>Porsche 911 Carrera 4S</span>
-        <span>2020 · 450 CV</span>
+        <span>${homeHero.brand} ${homeHero.model}</span>
+        <span>${homeHero.year} · ${homeHero.hp} CV</span>
       </div>
     </section>
 
