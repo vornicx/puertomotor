@@ -46,7 +46,7 @@ export function vehicleCard(vehicle, large = false) {
 }
 
 export function trustRail() {
-  return `<section class="trust-rail" aria-label="Garantías Puerto Motor">
+  return `<section class="trust-rail" id="servicios" aria-label="Garantías y servicios Puerto Motor">
     <div><strong>100</strong><span>puntos de revisión</span></div>
     <div><strong>Km</strong><span>certificados</span></div>
     <div><strong>12</strong><span>meses de garantía</span></div>
