@@ -7,6 +7,11 @@ const related = vehicles.filter(v=>v.id!==vehicle.id && (v.brand===vehicle.brand
 const gallery = vehicle.gallery?.length ? vehicle.gallery : [vehicle.hero];
 const app = document.querySelector('#app');
 
+document.title = `${vehicle.brand} ${vehicle.model} — Puerto Motor`;
+document.querySelector('meta[name="description"]')?.setAttribute('content', `${vehicle.brand} ${vehicle.model}, ${vehicle.year}, ${formatKm(vehicle.km)}, ${vehicle.hp} CV. Consulta fotografías, equipamiento, garantía y contacto con Puerto Motor.`);
+document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${vehicle.brand} ${vehicle.model} — Puerto Motor`);
+document.querySelector('meta[property="og:description"]')?.setAttribute('content', `${formatPrice(vehicle.price)} · ${formatKm(vehicle.km)} · ${vehicle.hp} CV · ${vehicle.warranty} de garantía.`);
+
 app.innerHTML = `${header('stock')}<main>
   <section class="detail">
     <a class="detail__back" href="/stock.html">← Volver al stock</a>
