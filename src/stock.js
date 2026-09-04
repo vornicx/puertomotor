@@ -20,7 +20,7 @@ ${header('stock')}
     <button type="button" class="toolbar-clear" data-clear>Limpiar</button>
   </form>
   <section class="stock-results">
-    <div class="results-bar"><div class="results-count" data-count></div><span>Inventario de muestra conectado al stock real de Puerto Motor</span></div>
+    <div class="results-bar"><div class="results-count" data-count></div><span>Selección actual de Puerto Motor</span></div>
     <div class="vehicle-grid" data-grid></div>
   </section>
 </main>${footer()}`;
