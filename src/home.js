@@ -35,8 +35,7 @@ app.innerHTML = `
     <section class="hero home-hero">
       <div class="hero__image" aria-hidden="true" style="background-image:url('${homeHero.hero}');background-position:${homeHero.heroPosition || '50% 50%'}"></div>
       <div class="hero__content">
-        <h1>Automóviles<br>extraordinarios.</h1>
-        <p>Selección de vehículos premium y deportivos con historial claro, kilometraje certificado y atención directa de Puerto Motor.</p>
+        <h1>Automóviles<br>seleccionados.</h1>
         <div class="hero__actions">
           <a class="button button--light" href="/stock.html">${buttonLabel('Ver stock')}</a>
           <a class="button" href="#vende">${buttonLabel('Vender mi coche')}</a>
@@ -55,8 +54,8 @@ app.innerHTML = `
           <h2>Disponibles ahora.</h2>
         </div>
         <div class="home-selection__intro">
-          <p>Una selección corta de unidades que representan el tipo de automóvil que buscamos: configuración, estado y procedencia por delante del volumen.</p>
-          <a class="text-link" href="/stock.html">${buttonLabel('Explorar todo el stock')}</a>
+          <p>Unidades seleccionadas por configuración, estado y procedencia.</p>
+          <a class="text-link" href="/stock.html">${buttonLabel('Ver stock completo')}</a>
         </div>
       </header>
 
@@ -72,8 +71,7 @@ app.innerHTML = `
       <div class="stock-entry__intro">
         <span class="home-index">02</span>
         <div>
-          <h2>Busca por coche.<br>No por ruido.</h2>
-          <p>Filtra el stock por lo esencial y entra directamente en cada unidad con fotografías reales, precio y datos claros.</p>
+          <h2>Encuentra<br>tu unidad.</h2>
         </div>
       </div>
       <form class="stock-entry__form" data-search-form>
@@ -92,14 +90,14 @@ app.innerHTML = `
       <div class="home-place__copy" id="servicios">
         <span class="home-index">03</span>
         <div class="section-kicker">Puerto Motor</div>
-        <h2>El coche importa.<br>Cómo se vende, también.</h2>
-        <p>Más de diez años comprando y vendiendo automóviles. Cada unidad se revisa antes de la entrega y se presenta con información clara sobre kilometraje, mantenimiento y estado.</p>
+        <h2>Más de diez años<br>seleccionando automóviles.</h2>
+        <p>Cada unidad se revisa antes de la entrega. Kilometraje, mantenimiento y estado, claramente indicados.</p>
         <div class="home-place__facts">
           <div><strong>100</strong><span>puntos de revisión</span></div>
           <div><strong>Km</strong><span>certificados</span></div>
           <div><strong>12</strong><span>meses de garantía</span></div>
         </div>
-        <a class="text-link text-link--light" href="#contacto">${buttonLabel('Hablar con Puerto Motor')}</a>
+        <a class="text-link text-link--light" href="#contacto">${buttonLabel('Contactar')}</a>
       </div>
     </section>
 
@@ -108,16 +106,16 @@ app.innerHTML = `
         <span class="home-index">04</span>
         <div>
           <div class="section-kicker">Vende tu coche</div>
-          <h2>Una valoración seria.<br>Sin convertirlo en un formulario eterno.</h2>
+          <h2>Vende tu coche<br>a Puerto Motor.</h2>
         </div>
       </div>
       <div class="sell-editorial__body">
-        <p>Cuéntanos qué coche tienes, kilometraje y estado. El equipo revisa la información y continúa contigo de forma directa.</p>
+        <p>Envíanos modelo, año, kilómetros y estado. Te contactamos para valorar la unidad.</p>
         <a class="button button--dark" href="https://wa.me/34605932417?text=${encodeURIComponent('Hola, quiero valorar mi coche para venderlo a Puerto Motor')}">${buttonLabel('Solicitar valoración')}</a>
         <div class="sell-editorial__steps">
           <div><span>01</span><strong>Datos del coche</strong><p>Modelo, año, kilómetros y estado.</p></div>
-          <div><span>02</span><strong>Revisión</strong><p>Valoramos la unidad y su historial.</p></div>
-          <div><span>03</span><strong>Oferta</strong><p>Recibes una propuesta y seguimos contigo directamente.</p></div>
+          <div><span>02</span><strong>Revisión</strong><p>Revisamos la unidad y su historial.</p></div>
+          <div><span>03</span><strong>Oferta</strong><p>Recibes nuestra oferta.</p></div>
         </div>
       </div>
     </section>
