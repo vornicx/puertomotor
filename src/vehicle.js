@@ -23,7 +23,7 @@ function ensureMeta(attribute, key, content) {
 }
 
 document.title = `${vehicle.brand} ${vehicle.model} — Puerto Motor`;
-document.querySelector('meta[name="description"]')?.setAttribute('content', `${vehicle.brand} ${vehicle.model}, ${vehicle.year}, ${formatKm(vehicle.km)}, ${vehicle.hp} CV. Consulta fotografías, equipamiento, garantía y contacto con Puerto Motor.`);
+document.querySelector('meta[name="description"]')?.setAttribute('content', `${vehicle.brand} ${vehicle.model}, ${vehicle.year}, ${formatKm(vehicle.km)}, ${vehicle.hp} CV. Fotografías, equipamiento, garantía y contacto con Puerto Motor.`);
 ensureMeta('property', 'og:title', `${vehicle.brand} ${vehicle.model} — Puerto Motor`);
 ensureMeta('property', 'og:description', `${formatPrice(vehicle.price)} · ${formatKm(vehicle.km)} · ${vehicle.hp} CV · ${vehicle.warranty} de garantía.`);
 ensureMeta('property', 'og:image', vehicle.hero);
@@ -111,9 +111,9 @@ app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${veh
         </div>
         <div class="detail__actions">
           <a class="button button--dark" href="https://wa.me/34605932417?text=${infoMessage}">${buttonLabel('WhatsApp')}</a>
-          <a class="button button--outline" href="tel:+34956856488">${buttonLabel('Llamar a ventas')}</a>
+          <a class="button button--outline" href="tel:+34956856488">${buttonLabel('Llamar')}</a>
         </div>
-        <a class="detail__source" href="https://wa.me/34605932417?text=${fichaMessage}">Solicitar ficha completa e historial →</a>
+        <a class="detail__source" href="https://wa.me/34605932417?text=${fichaMessage}">Solicitar ficha e historial →</a>
       </aside>
     </div>
   </section>
@@ -121,8 +121,8 @@ app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${veh
   <section class="product-numbers" aria-label="Datos principales de ${vehicle.brand} ${vehicle.model}">
     <div><span>Potencia</span><strong>${vehicle.hp}</strong><em>CV</em></div>
     <div><span>Kilometraje</span><strong>${new Intl.NumberFormat('es-ES').format(vehicle.km)}</strong><em>km</em></div>
-    <div><span>Año</span><strong>${vehicle.year}</strong><em>unidad</em></div>
-    <div><span>Cambio</span><strong>${vehicle.transmission}</strong><em>transmisión</em></div>
+    <div><span>Año</span><strong>${vehicle.year}</strong></div>
+    <div><span>Cambio</span><strong>${vehicle.transmission}</strong></div>
   </section>
 
   <section class="product-story">
@@ -143,7 +143,7 @@ app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${veh
     <div class="vehicle-story__intro">
       <div class="section-kicker">Equipamiento destacado</div>
       <div class="product-story__index">02</div>
-      <h2>Lo que define<br>esta unidad.</h2>
+      <h2>Equipamiento.</h2>
     </div>
     <div class="vehicle-story__list">${vehicle.highlights.map((item,index)=>`<div><span>${String(index+1).padStart(2,'0')}</span><strong>${item}</strong></div>`).join('')}</div>
   </section>
@@ -155,15 +155,15 @@ app.innerHTML = `${header('stock')}<main class="vehicle-page vehicle-page--${veh
     <div class="product-detail-scene__copy">
       <div class="section-kicker">Puerto Motor</div>
       <div class="product-story__index">03</div>
-      <h2>Información clara.<br>Sin letra pequeña visual.</h2>
-      <p>Esta unidad se presenta con fotografías reales, kilometraje indicado y los datos esenciales visibles desde el primer momento. Si necesitas documentación, historial o información adicional, el equipo de Puerto Motor te atiende directamente.</p>
+      <h2>Información y documentación.</h2>
+      <p>Solicita historial, documentación o cualquier detalle adicional directamente al equipo de Puerto Motor.</p>
       <a class="text-link" href="https://wa.me/34605932417?text=${detailMessage}">${buttonLabel('Solicitar información')}</a>
     </div>
   </section>
 
   ${trustRail()}
 
-  ${related.length ? `<section class="section related"><div class="section-head"><div><div class="section-kicker">También puede interesarte</div><h2 class="section-title">Más selección Puerto Motor.</h2></div></div><div class="vehicle-grid">${related.map(v=>vehicleCard(v)).join('')}</div></section>` : ''}
+  ${related.length ? `<section class="section related"><div class="section-head"><div><div class="section-kicker">Relacionados</div><h2 class="section-title">Vehículos relacionados.</h2></div></div><div class="vehicle-grid">${related.map(v=>vehicleCard(v)).join('')}</div></section>` : ''}
 
   <div class="mobile-vehicle-cta" aria-label="Contactar sobre ${vehicle.brand} ${vehicle.model}">
     <div><span>${vehicle.brand}</span><strong>${formatPrice(vehicle.price)}</strong></div>
