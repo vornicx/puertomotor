@@ -1,49 +1,131 @@
-import { vehicles, brands, bodies, fuels } from './data.js';
-import { header, vehicleCard, footer, setupShell } from './components.js';
+import { vehicles, brands, bodies, fuels, formatPrice, formatKm } from './data.js';
+import { header, footer, setupShell, buttonLabel } from './components.js';
 
 const params = new URLSearchParams(location.search);
 const app = document.querySelector('#app');
+
+function selectOption(value, current, label = value) {
+  return `<option value="${value}" ${current === value ? 'selected' : ''}>${label}</option>`;
+}
+
+function stockItem(vehicle, index) {
+  const lead = index === 0;
+  return `
+    <article class="stock-item ${lead ? 'stock-item--lead' : ''}">
+      <a class="stock-item__media" href="/vehicle.html?id=${vehicle.id}" aria-label="Ver ${vehicle.brand} ${vehicle.model}">
+        <img src="${vehicle.hero}" alt="${vehicle.brand} ${vehicle.model}" ${lead ? 'fetchpriority="high"' : 'loading="lazy"'} style="object-position:${vehicle.heroPosition || '50% 50%'}">
+        <span class="stock-item__status">Disponible</span>
+      </a>
+      <div class="stock-item__info">
+        <div class="stock-item__identity">
+          <div class="stock-item__eyebrow">${vehicle.brand} · ${vehicle.year}</div>
+          <h2><a href="/vehicle.html?id=${vehicle.id}">${vehicle.model}</a></h2>
+          <div class="stock-item__meta">
+            <span>${formatKm(vehicle.km)}</span>
+            <span>${vehicle.hp} CV</span>
+            <span>${vehicle.fuel}</span>
+          </div>
+        </div>
+        <div class="stock-item__commercial">
+          <strong>${formatPrice(vehicle.price)}</strong>
+          <a class="text-link" href="/vehicle.html?id=${vehicle.id}">${buttonLabel('Ver unidad')}</a>
+        </div>
+      </div>
+    </article>`;
+}
+
 app.innerHTML = `
 ${header('stock')}
-<main>
-  <section class="page-hero page-hero--stock">
-    <div class="page-hero__count">Stock actual</div>
-    <h1>Unidades disponibles.</h1>
+<main class="stock-page">
+  <section class="stock-intro">
+    <div>
+      <div class="stock-intro__eyebrow">Stock actual</div>
+      <h1>Unidades disponibles.</h1>
+    </div>
+    <div class="stock-intro__total"><strong>${vehicles.length}</strong><span>vehículos</span></div>
   </section>
-  <form class="stock-toolbar" data-toolbar>
-    <select name="brand"><option value="">Todas las marcas</option>${brands.map(x=>`<option ${params.get('brand')===x?'selected':''}>${x}</option>`).join('')}</select>
-    <select name="body"><option value="">Todas las carrocerías</option>${bodies.map(x=>`<option ${params.get('body')===x?'selected':''}>${x}</option>`).join('')}</select>
-    <select name="fuel"><option value="">Todos los combustibles</option>${fuels.map(x=>`<option ${params.get('fuel')===x?'selected':''}>${x}</option>`).join('')}</select>
-    <select name="price"><option value="">Cualquier precio</option><option value="60000" ${params.get('price')==='60000'?'selected':''}>Hasta 60.000 €</option><option value="150000" ${params.get('price')==='150000'?'selected':''}>Hasta 150.000 €</option><option value="300000" ${params.get('price')==='300000'?'selected':''}>Hasta 300.000 €</option><option value="650000" ${params.get('price')==='650000'?'selected':''}>Hasta 650.000 €</option></select>
-    <select name="sort" aria-label="Ordenar vehículos"><option value="featured">Orden recomendado</option><option value="price-asc">Precio: menor a mayor</option><option value="price-desc">Precio: mayor a menor</option><option value="km-asc">Menos kilómetros</option><option value="year-desc">Más recientes</option></select>
-    <button type="button" class="toolbar-clear" data-clear>Limpiar</button>
-  </form>
-  <section class="stock-results">
-    <div class="results-bar"><div class="results-count" data-count></div></div>
-    <div class="vehicle-grid" data-grid></div>
+
+  <div class="stock-controls-shell">
+    <form class="stock-controls" data-toolbar>
+      <label><span>Marca</span><select name="brand"><option value="">Todas</option>${brands.map(x=>selectOption(x, params.get('brand'))).join('')}</select></label>
+      <label><span>Carrocería</span><select name="body"><option value="">Todas</option>${bodies.map(x=>selectOption(x, params.get('body'))).join('')}</select></label>
+      <label><span>Combustible</span><select name="fuel"><option value="">Todos</option>${fuels.map(x=>selectOption(x, params.get('fuel'))).join('')}</select></label>
+      <label><span>Precio</span><select name="price"><option value="">Sin límite</option>${selectOption('60000',params.get('price'),'Hasta 60.000 €')}${selectOption('150000',params.get('price'),'Hasta 150.000 €')}${selectOption('300000',params.get('price'),'Hasta 300.000 €')}${selectOption('650000',params.get('price'),'Hasta 650.000 €')}</select></label>
+      <label class="stock-controls__sort"><span>Orden</span><select name="sort">${selectOption('featured',params.get('sort') || 'featured','Recomendado')}${selectOption('price-asc',params.get('sort'),'Precio ↑')}${selectOption('price-desc',params.get('sort'),'Precio ↓')}${selectOption('km-asc',params.get('sort'),'Menos km')}${selectOption('year-desc',params.get('sort'),'Más recientes')}</select></label>
+      <button type="button" class="stock-controls__clear" data-clear>Limpiar</button>
+    </form>
+  </div>
+
+  <section class="stock-catalogue">
+    <header class="stock-catalogue__head">
+      <div class="stock-catalogue__count" data-count></div>
+      <div class="stock-catalogue__filters" data-active-filters></div>
+    </header>
+    <div class="stock-catalogue__grid" data-grid></div>
   </section>
-</main>${footer()}`;
+</main>
+${footer()}`;
+
 setupShell();
 
 const form = document.querySelector('[data-toolbar]');
 const grid = document.querySelector('[data-grid]');
 const count = document.querySelector('[data-count]');
+const activeFilters = document.querySelector('[data-active-filters]');
+const clearButton = document.querySelector('[data-clear]');
+
+function syncUrl(fd) {
+  const next = new URLSearchParams();
+  for (const [key, value] of fd.entries()) {
+    if (!value) continue;
+    if (key === 'sort' && value === 'featured') continue;
+    next.set(key, value);
+  }
+  const query = next.toString();
+  history.replaceState({}, '', `/stock.html${query ? `?${query}` : ''}`);
+}
 
 function render() {
   const fd = new FormData(form);
-  const brand=fd.get('brand'), body=fd.get('body'), fuel=fd.get('fuel'), price=Number(fd.get('price')||Infinity), sort=fd.get('sort');
-  let filtered = vehicles.filter(v => (!brand || v.brand===brand) && (!body || v.body===body) && (!fuel || v.fuel===fuel) && v.price<=price);
-  filtered = [...filtered].sort((a,b) => {
+  const brand = fd.get('brand');
+  const body = fd.get('body');
+  const fuel = fd.get('fuel');
+  const price = Number(fd.get('price') || Infinity);
+  const sort = fd.get('sort');
+
+  let filtered = vehicles.filter(vehicle =>
+    (!brand || vehicle.brand === brand) &&
+    (!body || vehicle.body === body) &&
+    (!fuel || vehicle.fuel === fuel) &&
+    vehicle.price <= price
+  );
+
+  filtered = [...filtered].sort((a, b) => {
     if (sort === 'price-asc') return a.price - b.price;
     if (sort === 'price-desc') return b.price - a.price;
     if (sort === 'km-asc') return a.km - b.km;
     if (sort === 'year-desc') return b.year - a.year;
     return Number(Boolean(b.featured)) - Number(Boolean(a.featured));
   });
-  count.textContent = `${filtered.length} ${filtered.length===1?'vehículo':'vehículos'}`;
-  grid.innerHTML = filtered.length ? filtered.map(v=>vehicleCard(v)).join('') : '<div class="empty-state"><strong>No hay vehículos con estos filtros.</strong><span>Prueba a quitar algún filtro.</span></div>';
+
+  const filterCount = [brand, body, fuel, fd.get('price')].filter(Boolean).length;
+  count.textContent = `${filtered.length} ${filtered.length === 1 ? 'vehículo' : 'vehículos'}`;
+  activeFilters.textContent = filterCount ? `${filterCount} ${filterCount === 1 ? 'filtro activo' : 'filtros activos'}` : '';
+  clearButton.classList.toggle('is-hidden', filterCount === 0 && sort === 'featured');
+
+  grid.innerHTML = filtered.length
+    ? filtered.map(stockItem).join('')
+    : `<div class="stock-empty"><strong>Sin resultados.</strong><button type="button" data-empty-clear>Quitar filtros</button></div>`;
+
+  document.querySelector('[data-empty-clear]')?.addEventListener('click', clearFilters);
+  syncUrl(fd);
+}
+
+function clearFilters() {
+  form.reset();
+  render();
 }
 
 form.addEventListener('change', render);
-document.querySelector('[data-clear]').addEventListener('click', ()=>{ form.reset(); render(); history.replaceState({},'', '/stock.html'); });
+clearButton.addEventListener('click', clearFilters);
 render();
