@@ -39,7 +39,7 @@ export function vehicleCard(vehicle, large = false) {
       </div>
       <div class="vehicle-card__footer">
         <strong>${formatPrice(vehicle.price)}</strong>
-        <a href="/vehicle.html?id=${vehicle.id}">Ver detalles ${arrow}</a>
+        <a href="/vehicle.html?id=${vehicle.id}">Ver unidad ${arrow}</a>
       </div>
     </div>
   </article>`;
@@ -61,7 +61,7 @@ export function footer() {
         <div class="wordmark wordmark--light">PUERTO MOTOR</div>
         <p>Calle Estuario, 14<br>11500 El Puerto de Santa María, Cádiz</p>
       </div>
-      <div><a href="tel:+34956856488">956 856 488</a><a href="mailto:ventas4@puertomotor.es">ventas4@puertomotor.es</a><p>Atención directa del equipo de Puerto Motor.</p></div>
+      <div><a href="tel:+34956856488">956 856 488</a><a href="mailto:ventas4@puertomotor.es">ventas4@puertomotor.es</a></div>
       <div><a href="/stock.html">Stock</a><a href="/#vende">Vende tu coche</a><a href="/#servicios">Servicios</a><a href="/#puerto-motor">Puerto Motor</a></div>
       <div><a href="/#contacto">Contacto</a><a href="https://puertomotor.es/aviso-legal/">Aviso legal</a><a href="https://puertomotor.es/politica-de-privacidad/">Privacidad</a><a href="https://www.instagram.com/puertomotor/">Instagram</a></div>
     </footer>`;
