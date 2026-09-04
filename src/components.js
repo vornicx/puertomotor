@@ -28,7 +28,7 @@ export function vehicleCard(vehicle, large = false) {
   return `
   <article class="vehicle-card ${large ? 'vehicle-card--large' : ''}">
     <a class="vehicle-card__media" href="/vehicle.html?id=${vehicle.id}" aria-label="Ver ${vehicle.brand} ${vehicle.model}">
-      <img src="${vehicle.image}" alt="${vehicle.brand} ${vehicle.model}" loading="lazy" />
+      <img src="${vehicle.image}" alt="${vehicle.brand} ${vehicle.model}" loading="lazy" style="object-position:${vehicle.heroPosition || '50% 50%'}" />
       <span class="vehicle-card__status">Disponible</span>
     </a>
     <div class="vehicle-card__body">
