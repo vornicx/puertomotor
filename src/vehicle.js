@@ -17,8 +17,11 @@ app.innerHTML = `${header('stock')}<main>
     <a class="detail__back" href="/stock.html">← Volver al stock</a>
     <div class="detail__grid">
       <div class="detail__gallery" data-gallery>
-        <figure class="detail__image"><img src="${gallery[0]}" alt="${vehicle.brand} ${vehicle.model}" data-main-image></figure>
-        ${gallery.length > 1 ? `<div class="detail__thumbs">${gallery.map((image,index)=>`<button type="button" class="detail__thumb ${index===0?'is-active':''}" data-image="${image}" aria-label="Ver imagen ${index+1}"><img src="${image}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}
+        <figure class="detail__image">
+          <img src="${gallery[0]}" alt="${vehicle.brand} ${vehicle.model}" data-main-image>
+          ${gallery.length > 1 ? `<span class="detail__counter" data-gallery-counter>01 / ${String(gallery.length).padStart(2,'0')}</span>` : ''}
+        </figure>
+        ${gallery.length > 1 ? `<div class="detail__thumbs">${gallery.map((image,index)=>`<button type="button" class="detail__thumb ${index===0?'is-active':''}" data-image="${image}" data-index="${index}" aria-label="Ver imagen ${index+1}"><img src="${image}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}
       </div>
       <aside class="detail__panel">
         <div class="detail__availability"><span></span> Disponible</div>
@@ -53,6 +56,12 @@ setupShell();
 
 document.querySelectorAll('[data-image]').forEach((button) => button.addEventListener('click', () => {
   const main = document.querySelector('[data-main-image]');
-  main.src = button.dataset.image;
+  const counter = document.querySelector('[data-gallery-counter]');
+  main.style.opacity = '0';
+  window.setTimeout(() => {
+    main.src = button.dataset.image;
+    main.style.opacity = '1';
+  }, 120);
+  if (counter) counter.textContent = `${String(Number(button.dataset.index) + 1).padStart(2,'0')} / ${String(gallery.length).padStart(2,'0')}`;
   document.querySelectorAll('[data-image]').forEach((item) => item.classList.toggle('is-active', item === button));
 }));
