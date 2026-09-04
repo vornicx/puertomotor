@@ -1,4 +1,4 @@
-import { vehicles, featuredVehicles, brands, bodies, fuels } from './data.js';
+import { vehicles, featuredVehicles, brands, bodies } from './data.js';
 import { header, vehicleCard, footer, setupShell, trustRail, buttonLabel } from './components.js';
 
 const app = document.querySelector('#app');
@@ -25,7 +25,7 @@ app.innerHTML = `
       <button class="button button--light search-submit" type="submit">${buttonLabel('Buscar stock')}</button>
     </form>
 
-    <section class="section featured-section" id="servicios">
+    <section class="section featured-section" id="stock-destacado">
       <div class="section-head">
         <div><div class="section-kicker">Selección destacada</div><h2 class="section-title">Coches que no necesitan presentación.</h2></div>
         <a class="text-link" href="/stock.html">${buttonLabel('Ver todo el stock')}</a>
