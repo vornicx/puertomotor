@@ -1,5 +1,5 @@
 import { vehicles, featuredVehicles, brands, bodies, formatPrice, formatKm } from './data.js';
-import { header, footer, setupShell, trustRail, buttonLabel } from './components.js';
+import { header, footer, setupShell, buttonLabel } from './components.js';
 
 const app = document.querySelector('#app');
 const homeHero = featuredVehicles[0] || vehicles[0];
@@ -94,7 +94,7 @@ app.innerHTML = `
         <div class="section-kicker">Puerto Motor</div>
         <h2>El coche importa.<br>Cómo se vende, también.</h2>
         <p>Más de diez años comprando y vendiendo automóviles. Cada unidad se revisa antes de la entrega y se presenta con información clara sobre kilometraje, mantenimiento y estado.</p>
-        <div class="home-place__facts">
+        <div class="home-place__facts" id="servicios">
           <div><strong>100</strong><span>puntos de revisión</span></div>
           <div><strong>Km</strong><span>certificados</span></div>
           <div><strong>12</strong><span>meses de garantía</span></div>
@@ -121,8 +121,6 @@ app.innerHTML = `
         </div>
       </div>
     </section>
-
-    ${trustRail()}
   </main>
   ${footer()}`;
 setupShell();
